@@ -1,5 +1,6 @@
 package com.retro.messanger.resource;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -8,6 +9,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.retro.messanger.model.Comment;
 import com.retro.messanger.service.CommentService;
@@ -30,9 +34,12 @@ public class CommentResource {
 	}
 
 	@POST
-	public Comment addComment(@PathParam("messageId") long messageId,
-			Comment comment) {
-		return service.addComment(messageId, comment);
+	public Response addComment(@PathParam("messageId") long messageId,
+			@Context UriInfo urlInfo, Comment comment) {
+		Comment newComment = service.addComment(messageId, comment);
+		URI commentUri = urlInfo.getAbsolutePathBuilder()
+				.path(String.valueOf(newComment.getId())).build();
+		return Response.created(commentUri).entity(newComment).build();
 	}
 
 	@PUT
