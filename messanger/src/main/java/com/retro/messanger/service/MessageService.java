@@ -10,12 +10,6 @@ import com.retro.messanger.model.Message;
 public class MessageService {
 	private Map<Long, Message> messages = DatabaseClass.getAllMessages();
 
-	public MessageService() {
-		super();
-		messages.put(1L, new Message(1, "Hello World!", "Vinayak"));
-		messages.put(2L, new Message(2, "Hello Jersey!", "Vinayak"));
-	}
-
 	public List<Message> getAllMessages() {
 		return new ArrayList<Message>(messages.values());
 	}

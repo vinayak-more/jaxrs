@@ -16,34 +16,30 @@ import com.retro.messanger.model.Message;
 import com.retro.messanger.service.MessageService;
 
 @Path("/messages")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class MessagesResource {
 
 	MessageService service = new MessageService();
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Message> getMessages() {
 		return service.getAllMessages();
 	}
 
 	@GET
 	@Path("/{messageId}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message getMessage(@PathParam("messageId") long id) {
 		return service.getMessage(id);
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message addMessage(Message message) {
 		return service.addMessage(message);
 	}
 
 	@PUT
 	@Path("/{messageId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message updateMessage(@PathParam("messageId") long id,
 			Message message) {
 		message.setId(id);
@@ -52,8 +48,14 @@ public class MessagesResource {
 	
 	@DELETE
 	@Path("/{messageId}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteMessage(@PathParam("messageId") long id) {
 		service.deleteMessage(id);
 	}
+	
+	@Path("/{messageId}/comments")
+	public CommentResource getCommentResource(){
+		return new CommentResource();
+	}
+	
+	
 }
