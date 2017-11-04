@@ -18,7 +18,7 @@ public class MessagePredicate implements Predicate<Message> {
 
 	@Override
 	public boolean test(Message message) {
-		boolean flag = false;
+		boolean flag = true;
 		if (filter.getYear() > 0) {
 			c.setTime(message.getCreated());
 			flag = c.get(Calendar.YEAR) == filter.getYear();
