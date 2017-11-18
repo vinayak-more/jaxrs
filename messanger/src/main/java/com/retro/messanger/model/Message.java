@@ -2,12 +2,9 @@ package com.retro.messanger.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Message {
@@ -16,8 +13,7 @@ public class Message {
 	private String message;
 	private String author;
 	private Date created;
-	private Map<Long, Comment> comments= new HashMap<Long, Comment>();
-	private List<Link> links= new ArrayList<Link>();
+	private List<Link> links = new ArrayList<Link>();
 
 	public Message() {
 		super();
@@ -63,15 +59,6 @@ public class Message {
 		this.created = created;
 	}
 
-	@XmlTransient
-	public Map<Long, Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(Map<Long, Comment> comments) {
-		this.comments = comments;
-	}
-
 	public List<Link> getLinks() {
 		return links;
 	}
@@ -79,59 +66,13 @@ public class Message {
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
-	
-	public void addLink(String ref,String url){
-		Link link=new Link();
+
+	public void addLink(String ref, String url) {
+		Link link = new Link();
 		link.setRef(ref);
 		link.setUrl(url);
-		links.add(link);
-	}
+		this.getLinks().add(link);
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result
-				+ ((comments == null) ? 0 : comments.hashCode());
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((message == null) ? 0 : message.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Message other = (Message) obj;
-		if (author == null) {
-			if (other.author != null)
-				return false;
-		} else if (!author.equals(other.author))
-			return false;
-		if (comments == null) {
-			if (other.comments != null)
-				return false;
-		} else if (!comments.equals(other.comments))
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (id != other.id)
-			return false;
-		if (message == null) {
-			if (other.message != null)
-				return false;
-		} else if (!message.equals(other.message))
-			return false;
-		return true;
 	}
 
 }

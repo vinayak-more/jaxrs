@@ -1,62 +1,39 @@
 package com.retro.messanger.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.retro.messanger.database.DatabaseClass;
 import com.retro.messanger.model.Comment;
-import com.retro.messanger.model.Message;
+import com.retro.messanger.repository.CommentRepository;
+import com.retro.messanger.service.mapper.CommentMapper;
 
 public class CommentService {
+	CommentRepository repository;
+	CommentMapper mapper;
 
-	private Map<Long, Message> messages = DatabaseClass.getAllMessages();
+	public CommentService() {
+		super();
+		repository = new CommentRepository();
+		mapper = new CommentMapper();
+	}
 
 	public List<Comment> getAllComments(long messageId) {
-		Message message = messages.get(messageId);
-		if (message != null) {
-			return new ArrayList<Comment>(message.getComments().values());
-		}
-		return null;
+		return mapper.map(repository.getAllComments(messageId));
 	}
 
 	public Comment getComment(long messageId, long commentId) {
-		Message message = messages.get(messageId);
-		if (message != null) {
-			return message.getComments().get(commentId);
-		}
-		return null;
+		return mapper.map(repository.getComment(messageId, commentId));
 	}
 
 	public Comment addComment(long messageId, Comment comment) {
-		Message message = messages.get(messageId);
-		if (message != null) {
-			comment.setId(message.getComments().size() + 1);
-			message.getComments().put(comment.getId(), comment);
-			return comment;
-		} else {
-			return null;
-		}
+		return mapper.map(repository.save(messageId, mapper.map(comment)));
 	}
 
 	public Comment updateComment(long messageId, long commentId, Comment comment) {
-		Message message = messages.get(messageId);
-		if (message != null && message.getComments().containsKey(commentId)) {
-			comment.setId(commentId);
-			message.getComments().put(comment.getId(), comment);
-			return comment;
-		} else {
-			return null;
-		}
+		return mapper.map(repository.update(messageId, mapper.map(comment)));
 	}
 
 	public Comment deleteComment(long messageId, long commentId) {
-		Message message = messages.get(messageId);
-		if (message != null && message.getComments().containsKey(commentId)) {
-			return message.getComments().remove(commentId);
-		} else {
-			return null;
-		}
+		return mapper.map(repository.delete(messageId, commentId));
 	}
 
 }

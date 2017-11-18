@@ -1,4 +1,4 @@
-package com.retro.messanger.service;
+package com.retro.messanger.service.predicate;
 
 import java.util.Calendar;
 import java.util.function.Predicate;

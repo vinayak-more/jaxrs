@@ -1,22 +1,22 @@
-package com.retro.messanger.model;
+package com.retro.messanger.dao;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
 
-public class Comment {
+@Entity
+@Table(name = "comment")
+@NamedNativeQuery(name="getAllCommentsByMessageId",query="select * from comment where message_id=?")
+public class CommentEntity {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String comment;
 	private String author;
-
-	public Comment() {
-		super();
-	}
-
-	public Comment(long id, String comment, String author) {
-		super();
-		this.id = id;
-		this.comment = comment;
-		this.author = author;
-	}
 
 	public long getId() {
 		return id;
@@ -47,7 +47,6 @@ public class Comment {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
@@ -60,16 +59,11 @@ public class Comment {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Comment other = (Comment) obj;
+		CommentEntity other = (CommentEntity) obj;
 		if (author == null) {
 			if (other.author != null)
 				return false;
 		} else if (!author.equals(other.author))
-			return false;
-		if (comment == null) {
-			if (other.comment != null)
-				return false;
-		} else if (!comment.equals(other.comment))
 			return false;
 		if (id != other.id)
 			return false;

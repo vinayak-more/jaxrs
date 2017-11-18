@@ -1,20 +1,28 @@
 package com.retro.messanger.service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.retro.messanger.database.DatabaseClass;
 import com.retro.messanger.model.Message;
 import com.retro.messanger.model.MessageFilter;
+import com.retro.messanger.repository.MessageRepository;
+import com.retro.messanger.service.mapper.MessageMapper;
+import com.retro.messanger.service.predicate.MessagePredicate;
 
 public class MessageService {
-	private Map<Long, Message> messages = DatabaseClass.getAllMessages();
+
+	private MessageRepository repository;
+	private MessageMapper mapper;
+
+	public MessageService() {
+		this.repository = new MessageRepository();
+		mapper = new MessageMapper();
+	}
 
 	public List<Message> getAllMessages(MessageFilter filter) {
-		List<Message> messagesToFilter = new ArrayList<Message>(
-				messages.values());
+		List<Message> messagesToFilter = mapper
+				.map(repository.getAllMessages());
 		messagesToFilter = messagesToFilter.stream()
 				.filter(new MessagePredicate(filter))
 				.collect(Collectors.toList());
@@ -36,26 +44,24 @@ public class MessageService {
 		}
 	}
 
-	public Message getMessage(long id) {
-		return messages.get(id);
+	public Message getMessage(long messageId) {
+		return mapper.map(repository.getMessage(messageId));
 	}
 
 	public Message addMessage(Message message) {
-		message.setId(messages.size() + 1);
-		messages.put(message.getId(), message);
-		return message;
+		message.setCreated(new Date());
+		return mapper.map(repository.save(mapper.map(message)));
 	}
 
 	public Message updateMessage(Message message) {
 		if (message.getId() <= 0) {
 			return null;
 		}
-		messages.put(message.getId(), message);
-		return message;
+		return mapper.map(repository.update(mapper.map(message)));
 	}
 
 	public Message deleteMessage(long id) {
-		return messages.remove(id);
+		return mapper.map(repository.delete(id));
 	}
 
 }
